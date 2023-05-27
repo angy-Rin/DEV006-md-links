@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const input = __dirname;
-const regExp = /https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/g
+const regExp = /(https?:\/\/[^\s]+)/g;
 // const input_path = path.join(__dirname, input)
 let array = [];
 function principalFunction(input) {
@@ -15,39 +15,58 @@ function principalFunction(input) {
           principalFunction(fullPath);
         } else if (path.extname(file) === ".md") {
           array.push(fullPath);
+          resolve(array);
         }
       });
     }
-    resolve(array);
   });
 }
-
+const arrays = [];
 function leersincrono(file) {
   return new Promise(function (resolve, reject) {
-    fs.readFile(file, (err, data) => {
-      if (err) reject(err);
-      resolve(data.toString());
+    file.forEach((element, index, longitud) => {
+      fs.readFile(element, (err, data) => {
+        const url_ = data.toString().match(regExp) || "";
+          arrays.push(...url_);
+          if (index === longitud.length -1) {
+            console.log(arrays);
+          }
+      });
     });
   });
 }
 
-const array_url = [];
+// function leersincrono(file) {
+//     return new Promise(function (resolve, reject) {
+//       fs.readFile(file, (err, data) => {
+//         if (err) reject(err);
+//       const url_ = data.toString().match(regExp) || "";
+//           if(url_ != ""){
+//               resolve(url_);
+//           }
+//       });
+//     });
+//   }
 
-function url(content) {
-    return new Promise(function(resolve, reject){
-        const url_ = content.match(regExp) || "";
-        if(url_ != ""){
-            array_url.push(url_)
-            resolve(array_url);
-        }
-    })
-}
+// principalFunction(input).then((data) => {
+//     data.forEach((file) => {
+//       leersincrono(file).then((result) => {
+//         console.log(result)
+//       });
+//     });
+//   });
+
 principalFunction(input).then((data) => {
-  data.forEach((file) => {
-    leersincrono(file).then((result) => {
-      url(result).then((url) => {
-        console.log(url);
-      })
-    });
-  });
+  console.log(data);
+  leersincrono(data).then((result) => {});
 });
+
+// function url(content) {
+//     return new Promise(function(resolve, reject){
+//         const url_ = content.match(regExp) || "";
+//         if(url_ != ""){
+//             array_url.push(...url_)
+//             resolve(array_url);
+//         }
+//     })
+// }

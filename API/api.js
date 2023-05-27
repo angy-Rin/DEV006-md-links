@@ -29,7 +29,7 @@ function leersincrono(file) {
         const url_ = data.toString().match(regExp) || "";
           arrays.push(...url_);
           if (index === longitud.length -1) {
-            console.log(arrays);
+            resolve(arrays);
           }
       });
     });
@@ -57,8 +57,9 @@ function leersincrono(file) {
 //   });
 
 principalFunction(input).then((data) => {
-  console.log(data);
-  leersincrono(data).then((result) => {});
+  leersincrono(data).then((result) => {
+  console.log(result)
+  });
 });
 
 // function url(content) {

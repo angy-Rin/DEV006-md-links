@@ -50,7 +50,7 @@ const array_reques=[];
 
 function status(array_links) {
   return new Promise(function(resolve, reject) {
-    array_links.forEach((link, index2, longitud) => {
+    array_links.forEach((link, index, longitud) => {
       const request = {};
       https.get(link, (res) => {
           const { statusCode } = res;
@@ -62,7 +62,7 @@ function status(array_links) {
           request['status'] = statusCode; 
           request['href'] = link;
           array_reques.push(request);
-          if (index2 === longitud.length-2 ){
+          if (index === longitud.length -2 ){
             resolve(array_reques)
           }
         })

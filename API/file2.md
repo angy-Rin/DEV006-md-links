@@ -1,3 +1,1 @@
-2HOLAShttps://link1.com/
-
-https://link2.com/
+Si nunca has hecho un diagrama de flujo revisa este [recurso](https://www.youtube.com/watch?v=Lub5qOmY4JQ).

@@ -4,9 +4,10 @@ const path = require("path");
 const input = __dirname;
 const regExp = /(https?:\/\/[^\s]+)/g;
 // const input_path = path.join(__dirname, input)
-let array = [];
+
 
 function principalFunction(input) {
+  let array = [];
   return new Promise(function (resolve, reject) {
     if (!fs.existsSync(input)) {
       reject("Directorio/archivo no encontrado");
@@ -29,8 +30,9 @@ function principalFunction(input) {
     }
   });
 }
-const arrays = [];
+
 function leersincrono(file) {
+  const arrays = [];
   return new Promise(function (resolve, reject) {
     file.forEach((element, index, longitud) => {
       fs.readFile(element, (err, data) => {
@@ -48,9 +50,11 @@ const https = require('https');
 
 function status(array_links) {
   return new Promise(function(resolve, reject) {
-    const array_reques = []; // Variable para almacenar los resultados de las solicitudes
+    const array_request = []; // Variable para almacenar los resultados de las solicitudes
 
     // Función auxiliar para hacer una solicitud GET a un enlace
+    //https.get no puede trabajar directamente con iteraciones, los contadores tampoco funcionan. Modifica los
+    //iteradores
     function getRequest(link) {
       return new Promise(function(resolve, reject) {
         const request = {
@@ -84,8 +88,8 @@ function status(array_links) {
     // Esperar a que todas las solicitudes se completen
     Promise.all(promises)
       .then((results) => {
-        array_reques.push(...results);
-        resolve(array_reques);
+        array_request.push(...results);
+        resolve(array_request);
       })
       .catch((error) => {
         reject(error);
@@ -94,9 +98,10 @@ function status(array_links) {
 }
 
 
-function cleanUrl(string_url) {
+function cleanUrl(string_url) { //limpiar la URL de caracteres especiales al final del string
   return new Promise(function (resolve, reject) {
     const array_cleanUrl = [];
+    // iterar por cada URL recibida, mientras se encuentre un caracter especial al final del string, se eliminará
     string_url.forEach((eachurl) => {
       while (/[^\w\s]$/.test(eachurl)) {
         const string = eachurl.replace(/[^\w\s]$/, "");
@@ -108,13 +113,18 @@ function cleanUrl(string_url) {
   });
 }
 
-principalFunction(input).then((data) => {
-  leersincrono(data).then((result) => {
-    cleanUrl(result).then((clean_url) => {
-      console.log(clean_url)
-       status(clean_url).then((object) => {
-        console.log(object)
-       })
-    });
+module.exports = function mdLinks(path) {  
+  // La función debe retornar una promesa (Promise) que resuelva a un arreglo (Array) de objetos
+  return new Promise((resolve, reject) => {
+    principalFunction(path)
+      .then((data) => leersincrono(data))
+      .then((result) => cleanUrl(result))
+      .then((clean_url) => status(clean_url))
+      .then((object) => {
+        resolve(object); 
+      })
+      .catch((error) => {
+        reject(error); 
+      });
   });
-});
+};

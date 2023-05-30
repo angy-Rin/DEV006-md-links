@@ -44,58 +44,55 @@ function leersincrono(file) {
   });
 }
 
-const https = require("https");
-const array_reques=[];
-
+const https = require('https');
 
 function status(array_links) {
   return new Promise(function(resolve, reject) {
-    array_links.forEach((link, index, longitud) => {
-      const request = {};
-      https.get(link, (res) => {
+    const array_reques = []; // Variable para almacenar los resultados de las solicitudes
+
+    // Función auxiliar para hacer una solicitud GET a un enlace
+    function getRequest(link) {
+      return new Promise(function(resolve, reject) {
+        const request = {
+          href: link
+        };
+
+        https.get(link, (res) => {
           const { statusCode } = res;
+
           if (statusCode === 200) {
-            request['ok'] = 'ok';
+            request.ok = 'ok';
           } else {
-            request['ok'] = 'fail'; 
-          } 
-          request['status'] = statusCode; 
-          request['href'] = link;
-          array_reques.push(request);
-          if (index === longitud.length -2 ){
-            resolve(array_reques)
+            request.ok = 'fail';
           }
-        })
-    })
-  })
+
+          request.status = statusCode;
+          resolve(request);
+        }).on('error', (err) => {
+          request.ok = 'fail';
+          request.status = null;
+          resolve(request);
+        });
+      });
+    }
+
+    // Iterar sobre cada enlace y hacer las solicitudes GET
+    const promises = array_links.map((link) => {
+      return getRequest(link);
+    });
+
+    // Esperar a que todas las solicitudes se completen
+    Promise.all(promises)
+      .then((results) => {
+        array_reques.push(...results);
+        resolve(array_reques);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
 }
 
-// function status(array_links) {
-//   return new Promise(function(resolve, reject) {
-//     array_links.forEach((link, index, longitud) => {
-//       https.get(link, (res) => {
-//           const { statusCode } = res;
-//           if (statusCode === 200) {
-//             request['status'] = statusCode; 
-//             request['ok'] = 'ok'; 
-//             request['href'] = link;
-//             array_reques.push(request);
-//             resolve(array_reques)
-//             res.on("data", (chunk) => {
-//               // console.log(chunk.toString());
-//             });
-//           } else {
-//             console.log(` fail ${statusCode}`);
-//           } 
-//         })
-//         .on("error", (err) => {
-//           reject.log(err);
-//         });
-//     });
-   
-//   })
-  
-// }
 
 function cleanUrl(string_url) {
   return new Promise(function (resolve, reject) {
@@ -114,39 +111,10 @@ function cleanUrl(string_url) {
 principalFunction(input).then((data) => {
   leersincrono(data).then((result) => {
     cleanUrl(result).then((clean_url) => {
+      console.log(clean_url)
        status(clean_url).then((object) => {
         console.log(object)
        })
     });
   });
 });
-
-// function leersincrono(file) {
-//     return new Promise(function (resolve, reject) {
-//       fs.readFile(file, (err, data) => {
-//         if (err) reject(err);
-//       const url_ = data.toString().match(regExp) || "";
-//           if(url_ != ""){
-//               resolve(url_);
-//           }
-//       });
-//     });
-//   }
-
-// principalFunction(input).then((data) => {
-//     data.forEach((file) => {
-//       leersincrono(file).then((result) => {
-//         console.log(result)
-//       });
-//     });
-//   });
-
-// function url(content) {
-//     return new Promise(function(resolve, reject){
-//         const url_ = content.match(regExp) || "";
-//         if(url_ != ""){
-//             array_url.push(...url_)
-//             resolve(array_url);
-//         }
-//     })
-// }

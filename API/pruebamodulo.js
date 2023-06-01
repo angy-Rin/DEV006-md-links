@@ -1,6 +1,6 @@
 const mdLinks = require("./api");
 
-mdLinks("file.md").then((links) => {
+mdLinks("file.md", {validate:true}).then((links) => {
   console.log(links);
   })
   .catch((err) => {
@@ -8,11 +8,11 @@ mdLinks("file.md").then((links) => {
   })
 
 
-mdLinks(__dirname).then((links) => {
-  console.log(links);
-  })
-  .catch((err) => {
-    console.log(err);
-  })
+// mdLinks(__dirname,{validate:true}).then((links) => {
+//   console.log(links);
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   })
 
 

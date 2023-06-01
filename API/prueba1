@@ -1,0 +1,11 @@
+const texto = "[recurso](https://www.youtube.com/watch?v=Lub5qOmY4JQ) [lol](https://www.youtube.com/watch?v=Lub5qOmY4JQ)";
+const expresionRegular = /\[(.*?)\]\((.*?)\)/g;
+
+const resultado = texto.match(expresionRegular);
+if(resultado) {
+    resultado.forEach(eachone => {
+        console.log(eachone)
+    }) 
+}
+
+console.log(resultado)

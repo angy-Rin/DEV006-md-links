@@ -3,6 +3,7 @@ const path = require("path");
 // const input = path.join(__dirname, "file.md");
 const input = __dirname;
 const regExp = /\]\((https?:\/\/[^\s]+)\)/g;
+const regExpText = /\[(.*?)\]\(/g;
 // const input_path = path.join(__dirname, input)
 
 const jsdom = require("jsdom");
@@ -11,6 +12,9 @@ const { JSDOM } = jsdom;
 function principalFunction(input) {
   let array = [];
   return new Promise(function (resolve, reject) {
+    if (!path.isAbsolute(input)) {
+      input = path.join(__dirname, input);
+    }
     if (!fs.existsSync(input)) {
       reject("Directorio/archivo no encontrado");
     }
@@ -35,13 +39,35 @@ function principalFunction(input) {
 
 function leersincrono(file) {
   const arrays = [];
+  const array_text = [];
+  const array_object = [];
   return new Promise(function (resolve, reject) {
     file.forEach((element, index, longitud) => {
       fs.readFile(element, (err, data) => {
         const url_ = data.toString().match(regExp) || "";
+        const text_ = data.toString().match(regExpText) || "";
         arrays.push(...url_);
+        array_text.push(...text_)
+        // request.href = (arrays);
         if (index === longitud.length - 1) {
-          resolve(arrays);
+          arrays.forEach((eachurl) => {
+            while (/[^\w\s]$/.test(eachurl)) {
+              const string = eachurl.replace(/[^\w\s]$/, "");
+              eachurl = string;
+            }
+            while (/^[\W_]+/.test(eachurl)) {
+              const string = eachurl.replace(/^[\W_]+/, "");
+              eachurl = string;
+            }
+            // array_cleanUrl.push(eachurl);
+            const request = {
+              href: eachurl,
+              file: element,
+              text: text_
+            };
+            array_object.push(request);
+            resolve(array_object);
+          });
         }
       });
     });
@@ -50,56 +76,25 @@ function leersincrono(file) {
 
 const https = require("https");
 
-function claveText(res) {
-  return new Promise((resolve, reject) => {
-    res.setEncoding("utf8");
-    let rawData = "";
-    res.on("data", (chunk) => {
-      rawData += chunk;
-    });
-    res.on("end", () => {
-      try {
-        const dom = new JSDOM(rawData);
-        const small2 = dom.window.document.querySelector("title").textContent;
-        const smallData2 = small2.slice(0, 50);
-        resolve(smallData2);
-      } catch (e) {
-        reject(e);
-      }
-    });
-  });
-}
-
 function getRequest(link) {
   return new Promise((resolve, reject) => {
-    const request = {
-      href: link,
-    };
-
     https
-      .get(link, (res) => {
+      .get(link.href, (res) => {
         const { statusCode } = res;
 
         if (statusCode === 200) {
-          request.ok = "ok";
+          link.ok = "ok";
         } else {
-          request.ok = "fail";
+          link.ok = "fail";
         }
-
-        claveText(res)
-          .then((valor) => {
-            request.text = valor;
-            request.status = statusCode;
-            resolve(request);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        link.status = statusCode;
+        resolve(link);
+        
       })
       .on("error", (err) => {
-        request.ok = "fail";
-        request.status = null;
-        resolve(request);
+        link.ok = "fail";
+        link.status = null;
+        resolve(link);
       });
   });
 }
@@ -123,36 +118,19 @@ function status(array_links) {
   });
 }
 
-
-function cleanUrl(string_url) {
-  //limpiar la URL de caracteres especiales al final del string
-  return new Promise(function (resolve, reject) {
-    const array_cleanUrl = [];
-    // iterar por cada URL recibida, mientras se encuentre un caracter especial al final del string, se eliminará
-    string_url.forEach((eachurl) => {
-      while (/[^\w\s]$/.test(eachurl)) {
-        const string = eachurl.replace(/[^\w\s]$/, "");
-        eachurl = string;
-      }
-      while (/^[\W_]+/.test(eachurl)) {
-        const string = eachurl.replace(/^[\W_]+/, "");
-        eachurl = string;
-      }
-      array_cleanUrl.push(eachurl);
-    });
-    resolve(array_cleanUrl);
-  });
-}
-
-module.exports = function mdLinks(path) {
+module.exports = function mdLinks(path, options = {}) {
   // La función debe retornar una promesa (Promise) que resuelva a un arreglo (Array) de objetos
   return new Promise((resolve, reject) => {
     principalFunction(path)
       .then((data) => leersincrono(data))
-      .then((result) => cleanUrl(result))
-      .then((clean_url) => status(clean_url))
-      .then((object) => {
-        resolve(object);
+      .then((result) => {
+        if (options.validate === true) {
+          status(result).then((object) => {
+            resolve(object);
+          });
+        } else {
+          resolve(result);
+        }
       })
       .catch((error) => {
         reject(error);

@@ -8,9 +8,9 @@ const regExpText = /\[(.*?)\]\(/g;
 
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
-
+let array = [];
 function principalFunction(input) {
-  let array = [];
+
   return new Promise(function (resolve, reject) {
     if (!path.isAbsolute(input)) {
       input = path.join(__dirname, input);
@@ -38,41 +38,26 @@ function principalFunction(input) {
 }
 
 function leersincrono(file) {
-  const arrays = [];
-  const array_text = [];
-  const array_object = [];
-  return new Promise(function (resolve, reject) {
-    file.forEach((element, index, longitud) => {
+  return new Promise(function(resolve, reject){
+    const linkRegex = /\[([^\]]+)\]\((?!#)([^\)]+)\)/g; //regular expression first matches [text] & then (text) except if it starts with #
+    const links = [];
+    let match;
+    file.map((element, index, longitud) => {
       fs.readFile(element, (err, data) => {
-        const url_ = data.toString().match(regExp) || "";
-        const text_ = data.toString().match(regExpText) || "";
-        arrays.push(...url_);
-        array_text.push(...text_)
-        // request.href = (arrays);
-        if (index === longitud.length - 1) {
-          arrays.forEach((eachurl) => {
-            while (/[^\w\s]$/.test(eachurl)) {
-              const string = eachurl.replace(/[^\w\s]$/, "");
-              eachurl = string;
-            }
-            while (/^[\W_]+/.test(eachurl)) {
-              const string = eachurl.replace(/^[\W_]+/, "");
-              eachurl = string;
-            }
-            // array_cleanUrl.push(eachurl);
-            const request = {
-              href: eachurl,
-              file: element,
-              text: text_
-            };
-            array_object.push(request);
-            resolve(array_object);
-          });
+        while ((match = linkRegex.exec(data)) !== null) {
+          const linkText = match[1];
+          const linkUrl = match[2];
+          links.push({ href: linkUrl, text: linkText, file: element  });
         }
-      });
-    });
-  });
+       if(index === longitud.length-1){
+        resolve(links);
+       } 
+      })
+    })
+  })
+ 
 }
+
 
 const https = require("https");
 

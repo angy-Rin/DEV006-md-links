@@ -4,7 +4,7 @@ const expresionRegular = /\[(.*?)\]\((.*?)\)/g;
 const resultado = texto.match(expresionRegular);
 if(resultado) {
     resultado.forEach(eachone => {
-        console.log(eachone)
+        const text = eachone
     }) 
 }
 

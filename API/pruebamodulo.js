@@ -8,7 +8,7 @@ const mdLinks = require("./api");
 //   })
 
 
-mdLinks(__dirname).then((links) => {
+mdLinks(__dirname, {validate:true}).then((links) => {
   console.log(links);
   })
   .catch((err) => {

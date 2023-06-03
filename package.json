@@ -4,6 +4,11 @@
   "engines": {
     "node": ">=16.x"
   },
+  "scripts": {
+    "eslint": "eslint --ext .js src/ test/",
+    "stylelint": "stylelint --aei src/**/*.css",
+    "test": "jest --coverage"
+  },
   "bootcamp": {
     "createdAt": "2023-05-17T14:36:24.002Z",
     "version": "6.2.0",
@@ -12,5 +17,8 @@
   "dependencies": {
     "jsdom": "^22.1.0",
     "json": "^11.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0"
   }
 }

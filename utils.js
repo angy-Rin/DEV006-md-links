@@ -6,10 +6,10 @@ function resolverDirectorio(input) {
 
     return new Promise(function (resolve, reject) {
       if (!path.isAbsolute(input)) {
-        input = path.join(__dirname, input);
+        input = path.resolve(input);
       }
       if (!fs.existsSync(input)) {
-        reject("Directorio/archivo no encontrado");
+        reject( ` ${input} Directorio/archivo no encontrado`);
       }
       if (fs.statSync(input).isDirectory()) {
         fs.readdirSync(input).forEach((file) => {

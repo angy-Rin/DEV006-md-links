@@ -10,7 +10,7 @@ module.exports = function mdLinks(path, options = {}) {
     resolverDirectorio(path)
       .then((data) => leerArchivos(data))
       .then((result) => {
-        if (options.validate === true || argument === "--validate") {
+        if (options.validate === true) {
           validateTrue(result).then((object) => {
             resolve(object);
           });

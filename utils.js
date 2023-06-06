@@ -2,33 +2,72 @@ const fs = require("fs");
 const path = require("path");
 let array = [];
 
-function resolverDirectorio(input) {
 
-    return new Promise(function (resolve, reject) {
-      if (!path.isAbsolute(input)) {
-        input = path.resolve(input);
-      }
-      if (!fs.existsSync(input)) {
-        reject( ` ${input} Directorio/archivo no encontrado`);
-      }
-      if (fs.statSync(input).isDirectory()) {
-        fs.readdirSync(input).forEach((file) => {
-          let fullPath = path.join(input, file);
-          if (fs.statSync(fullPath).isDirectory()) {
-            resolverDirectorio(fullPath);
-          } else if (path.extname(file) === ".md") {
-            array.push(fullPath);
-            resolve(array);
-          }
-        });
-      } else if (path.extname(input) === ".md") {
-          array.push(input);
-          resolve(array);
-      } else {
-        reject(`${input} no es un MARKDOWN`)
-      }
-    });
-  }
+function resolverDirectorio(input) {
+  return new Promise(function (resolve, reject) {
+    if (typeof input !== "string"){
+      reject("El path debe ser un string")
+    }
+    if (!path.isAbsolute(input)) {
+      input = path.resolve(input);
+    }
+    if (!fs.existsSync(input)) {
+      reject(`${input} Directorio/archivo no encontrado`);
+    }
+    const array = []; // Crear un array para almacenar los archivos
+
+    const readDirectory = (directory) => {
+      console.log("HOLACOMOESTAS")
+      const files = fs.readdirSync(directory);
+      files.forEach((file) => {
+        let fullPath = path.join(directory, file);
+        if (fs.statSync(fullPath).isDirectory()) {
+          readDirectory(fullPath); // Llamar recursivamente a readDirectory
+        } else if (path.extname(file) === ".md") {
+          array.push(fullPath);
+        }
+      });
+    };
+
+    if (fs.statSync(input).isDirectory()) {
+      readDirectory(input); // Llamar a la función readDirectory en lugar de resolver/recursividad
+      resolve(array); // Resolver la promesa una vez que se haya terminado de leer el directorio
+    } else if (path.extname(input) === ".md") {
+      array.push(input);
+      resolve(array);
+    } else {
+      reject(`${input} no es un MARKDOWN`);
+    }
+  });
+}
+
+// function resolverDirectorio(input) {
+
+//     return new Promise(function (resolve, reject) {
+//       if (!path.isAbsolute(input)) {
+//         input = path.resolve(input);
+//       }
+//       if (!fs.existsSync(input)) {
+//         reject( ` ${input} Directorio/archivo no encontrado`);
+//       }
+//       if (fs.statSync(input).isDirectory()) {
+//         fs.readdirSync(input).forEach((file) => {
+//           let fullPath = path.join(input, file);
+//           if (fs.statSync(fullPath).isDirectory()) {
+//             resolverDirectorio(fullPath);
+//           } else if (path.extname(file) === ".md") {
+//             array.push(fullPath);
+//             resolve(array);
+//           }
+//         });
+//       } else if (path.extname(input) === ".md") {
+//           array.push(input);
+//           resolve(array);
+//       } else {
+//         reject(`${input} no es un MARKDOWN`)
+//       }
+//     });
+//   }
 
   function leerArchivos(file) {
     return new Promise(function (resolve, reject) {
@@ -67,7 +106,8 @@ function getRequest(link) {
         resolve(link);
       })
       .on("error", (err) => {
-        link.push({ ok: "fail", status: null });
+        link.ok = "fail"
+        link.status = null;
         resolve(link);
       });
   });

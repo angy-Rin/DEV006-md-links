@@ -5,6 +5,9 @@ const path2 = process.argv[2];
 
 mdLinks(path2, { validate: true })
   .then((links) => {
+    if(links.length ===0) {
+      console.log("No se encontraron links!")
+    }
     links.map((object) => {
       if (argumento1 == "--validate") {
         console.log(
@@ -34,14 +37,14 @@ mdLinks(path2, { validate: true })
   .catch((err) => {
     console.log(err);
   });
-
+//Set es un objeto integrado (built-in) que permite almacenar colecciones de valores únicos, 
+//lo que significa que no permite elementos duplicados.
 function countUniqueUrl(array, key) {
   const uniqueUrl = new Set();
   array.map((obj) => uniqueUrl.add(obj[key]));
   return uniqueUrl.size;
 }
-
-
+//el 0 es para inicializar el count
 function countNumberOccurrences(array, number) {
     const numberCount = array.reduce((count, obj) => {
       if (obj === number) {

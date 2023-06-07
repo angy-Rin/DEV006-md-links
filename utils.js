@@ -17,7 +17,6 @@ function resolverDirectorio(input) {
     const array = []; // Crear un array para almacenar los archivos
 
     const readDirectory = (directory) => {
-      console.log("HOLACOMOESTAS")
       const files = fs.readdirSync(directory);
       files.forEach((file) => {
         let fullPath = path.join(directory, file);
@@ -40,34 +39,6 @@ function resolverDirectorio(input) {
     }
   });
 }
-
-// function resolverDirectorio(input) {
-
-//     return new Promise(function (resolve, reject) {
-//       if (!path.isAbsolute(input)) {
-//         input = path.resolve(input);
-//       }
-//       if (!fs.existsSync(input)) {
-//         reject( ` ${input} Directorio/archivo no encontrado`);
-//       }
-//       if (fs.statSync(input).isDirectory()) {
-//         fs.readdirSync(input).forEach((file) => {
-//           let fullPath = path.join(input, file);
-//           if (fs.statSync(fullPath).isDirectory()) {
-//             resolverDirectorio(fullPath);
-//           } else if (path.extname(file) === ".md") {
-//             array.push(fullPath);
-//             resolve(array);
-//           }
-//         });
-//       } else if (path.extname(input) === ".md") {
-//           array.push(input);
-//           resolve(array);
-//       } else {
-//         reject(`${input} no es un MARKDOWN`)
-//       }
-//     });
-//   }
 
   function leerArchivos(file) {
     return new Promise(function (resolve, reject) {

@@ -1,9 +1,10 @@
+const https = require("https");
 const {
   resolverDirectorio,
   leerArchivos,
-  validateTrue,
+  getRequest,
 } = require("../utils.js");
-const path = require("path");
+
 
 const testCases = [
   {
@@ -45,6 +46,11 @@ test(`resolverDirectorio con un archivo que no es .md`, () => {
     "C:\\Users\\cesar\\Documents\\DEV006-md-links\\thumb.png no es un MARKDOWN"
   );
 });
+test(`resolverDirectorio con una entrada que no es tipo string`, () => {
+  const noanString = {key:"value"};
+
+  return expect(resolverDirectorio(noanString)).rejects.toEqual("El path debe ser un string");
+});
 
 test(`leerArchivos `, async () => {
   const obj = [
@@ -58,65 +64,73 @@ test(`leerArchivos `, async () => {
   expect(result).toEqual(obj);
 });
 
+ 
 test(`peticiónHttps con status ok `, async () => {
-  const obj = [
-    {
-      file: "C:\\Users\\cesar\\Documents\\DEV006-md-links\\file2.md",
-      href: "https://www.youtube.com/watch?v=Lub5qOmY4JQ",
-      text: "recurso",
-    },
-  ];
-  const obj_result = [
-    {
-      file: "C:\\Users\\cesar\\Documents\\DEV006-md-links\\file2.md",
-      href: "https://www.youtube.com/watch?v=Lub5qOmY4JQ",
-      text: "recurso",
-      ok:"ok",
-      status: 200,
-    },
-  ];
-  const result = await validateTrue(obj);
-  expect(result).toEqual(obj_result);
+  const mockGet = jest.spyOn(https, 'get').mockImplementation((url, callback) => {
+    // comportamiento del callback de https.get
+  
+    // Simular un objeto 'res' con una propiedad 'statusCode' para probar diferentes casos
+    const res = {
+      statusCode: 200,
+      on: jest.fn().mockImplementation((event, eventCallback) => {
+        if (event === 'end') {
+          // Simula el evento 'end' llamando al callback, esto cubre la linea 79
+          eventCallback();
+        }
+      }),
+    };
+  
+    // Llama al callback simulado con el objeto 'res'
+    callback(res);
+  });
+
+  // Llama a la función getRequest con el enlace deseado
+  const link = { href: 'https://existelaurl.html' };
+  getRequest(link).then((result) => {
+    // Verifica los resultados esperados
+    expect(result.ok).toBe('ok');
+    expect(result.status).toBe(200);
+
+    // Restaura la implementación original de https.get
+    mockGet.mockRestore();
+  });
 });
 
-test(`peticiónHttps con fail`, async () => {
-  const obj = [
-    {
-      file: "C:\\Users\\cesar\\Documents\\DEV006-md-links\\file2.md",
-      href: "https://github.com/angy-1",
-      text: "link_404",
-    },
-  ];
-  const obj_result = [
-    {
-      file: "C:\\Users\\cesar\\Documents\\DEV006-md-links\\file2.md",
-      href: "https://github.com/angy-1",
-      text: "link_404",
-      ok:"fail",
-      status: 404,
-    },
-  ];
-  const result = await validateTrue(obj);
-  expect(result).toEqual(obj_result);
-});
+test(`peticiónHttps con status 404 `, async () => {
+  const mockGet = jest.spyOn(https, 'get').mockImplementation((url, callback) => {
+    const res = { statusCode: 404 };
+    callback(res);
+  });
+  const link = { href: 'https://linkroto.html' };
+  getRequest(link).then((result) => {
+    // Verifica los resultados esperados
+    expect(result.ok).toBe('fail');
+    expect(result.status).toBe(404);
 
-test(`peticiónHttps con fail`, async () => {
-  const obj = [
-    {
-      file: "C:\\Users\\cesar\\Documents\\DEV006-md-links\\file2.md",
-      href: "https://githubew.com/",
-      text: "link_inexistente",
-    },
-  ];
-  const obj_result = [
-    {
-      file: "C:\\Users\\cesar\\Documents\\DEV006-md-links\\file2.md",
-      href: "https://githubew.com/",
-      text: "link_inexistente",
-      ok:"fail",
-      status: null,
-    },
-  ];
-  const result = await validateTrue(obj);
-  expect(result).toEqual(obj_result);
+    // Restaura la implementación original de https.get
+    mockGet.mockRestore();
+  });
+});
+test('Prueba de getRequest con error de conexión', async () => {
+
+  const mockGet = jest.spyOn(https, 'get');
+
+  // Simula el evento 'error' llamando al callback con un objeto Error
+  const error = new Error('Error de conexión');
+  const resMock = {
+    on: jest.fn().mockImplementation((event, eventCallback) => {
+      if (event === 'error') {
+        eventCallback(error);
+      }
+    }),
+  };
+  mockGet.mockReturnValueOnce(resMock);
+
+  // Llama a la función getRequest con el enlace deseado
+  const link = { href: 'https://nohayconexion.com' };
+  return getRequest(link).then((result) => {
+    // Verifica que se haya ejecutado el callback de error
+    expect(result.status).toBe(error);
+    mockGet.mockRestore();
+  });
 });

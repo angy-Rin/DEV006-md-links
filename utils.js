@@ -65,10 +65,10 @@ function resolverDirectorio(input) {
 function getRequest(link) {
   return new Promise((resolve, reject) => {
     https
-      .get(link.href, (res) => {
+.get(link.href, (res) => {
         const { statusCode } = res;
 
-        if (statusCode === 200) {
+        if (statusCode >= 200 && statusCode<=226 || statusCode===301 ) {
           link.ok = "ok";
         } else {
           link.ok = "fail";
@@ -79,9 +79,10 @@ function getRequest(link) {
           resolve(link)
         });
       })
+      //error entra cuando no hay internet
       .on("error", (err) => {
-        link.ok = "fail"
-        link.status = null;
+        link.ok = "sin conexion"
+        link.status = err;
         resolve(link);
       }) //checar si end se ejecuta primero o despues del error
   });

@@ -15,11 +15,11 @@ if(argumento1 === "--validate" || argumento2 === "--validate" ){
 
 mdLinks(path2, options)
   .then((links) => {
-    const uniqueValueCount = countUniqueUrl(links, "href");
 
     if(links.length ===0) {
     console.log(chalk.bgBlack.hex("#4dcdff")("No se encontró ninguna URL 🔍!"))
     };
+    const uniqueValueCount = countUniqueUrl(links, "href");
     if (argumento1 !== "--stats") {
     links.map((object) => {
         console.log(

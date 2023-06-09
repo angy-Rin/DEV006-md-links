@@ -76,7 +76,6 @@ function getRequest(link) {
         link.status = statusCode;
         resolve(link);
         res.on("end",() => {
-          // console.log("END")
           resolve(link)
         });
       })

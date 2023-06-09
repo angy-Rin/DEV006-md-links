@@ -1,6 +1,4 @@
 const {resolverDirectorio, leerArchivos, validateTrue} = require('./utils.js');
-const fs = require("fs");
-const path = require("path");
 
 
 module.exports = function mdLinks(path, options = {}) {

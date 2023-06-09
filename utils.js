@@ -1,6 +1,5 @@
 const fs = require("fs");
 const path = require("path");
-let array = [];
 
 
 function resolverDirectorio(input) {
@@ -61,6 +60,7 @@ function resolverDirectorio(input) {
   }
 
   const https = require("https");
+  // https.requestTimeout = 5000;
 
 function getRequest(link) {
   return new Promise((resolve, reject) => {
@@ -75,18 +75,23 @@ function getRequest(link) {
         }
         link.status = statusCode;
         resolve(link);
+        res.on("end",() => {
+          // console.log("END")
+          resolve(link)
+        });
       })
       .on("error", (err) => {
         link.ok = "fail"
         link.status = null;
         resolve(link);
-      });
+      }) //checar si end se ejecuta primero o despues del error
   });
 }
 
 function validateTrue(array_links) {
     return new Promise((resolve, reject) => {
-      const array_request = [];
+      // no es conveniente utilizar una constante para almacenar datos asincronos
+      //const array_request = [];
   
       const promises = array_links.map((link) => {
         return getRequest(link);
@@ -94,8 +99,7 @@ function validateTrue(array_links) {
   
       Promise.all(promises)
         .then((results) => {
-          array_request.push(...results);
-          resolve(array_request);
+          resolve(results);
         })
         .catch((error) => {
           reject(error);

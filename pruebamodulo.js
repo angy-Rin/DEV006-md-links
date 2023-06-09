@@ -8,8 +8,9 @@ const mdLinks = require("./index.js");
 //   })
 
 
-mdLinks("file3.md", {validate:true}).then((links) => {
+mdLinks("./examples", {validate:true}).then((links) => {
   console.log(links);
+  console.log('FINAL RESULT',links.length);
   })
   .catch((err) => {
     console.log(err);

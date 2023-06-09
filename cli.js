@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-//ruta donde esta instalado npm de forma global
+// arriba ruta donde esta instalado npm de forma global
 const mdLinks = require("./index.js");
 const chalk = require("chalk")
 const argumento1 = process.argv[3];
@@ -9,46 +9,36 @@ let options={
   validate:false
 };
 
-if(argumento1 === "--validate"){
+if(argumento1 === "--validate" || argumento2 === "--validate" ){
   options.validate=true;
 }
 
 mdLinks(path2, options)
   .then((links) => {
+    const uniqueValueCount = countUniqueUrl(links, "href");
+
     if(links.length ===0) {
-    console.log("No se encontraron links!")
+    console.log(chalk.bgBlack.hex("#4dcdff")("No se encontró ninguna URL 🔍!"))
     };
-  //   if (argumento1 == "--validate") {
+    if (argumento1 !== "--stats") {
     links.map((object) => {
         console.log(
           `${(object.href)} ${chalk.bgBlack.hex("#4dcdff")(object.ok || "")} ${chalk.bgBlack.hex("#ab4dff")(object.status || "")} | ${object.text}`
           );
     });
-  // } else if (argumento1 === undefined) {
-  //   links.map((object) => {
-      
-  //       console.log(
-  //         `${(object.href)} ${chalk.bgBlack.hex("#4dcdff")(object.ok)} ${chalk.bgBlack.hex("#ab4dff")(object.status)} | ${object.text}`
-  //       );
-  //   });
-  // }
-  //   const uniqueValueCount = countUniqueUrl(links, "href");
-  //   if (argumento1 == "--stats" && argumento2 !== "--validate") {
-  //     console.log(`Total: ${links.length}`);
-  //     console.log(`Unique: ${uniqueValueCount}`);
-  //   }
-  //   if (argumento1 == "--stats" && argumento2 == "--validate") {
-  //     const numberCount = countNumberOccurrences(
-  //       links.map((obj) => obj.status),
-  //       404
-  //     );
-  //     console.log(`Total: ${links.length}`);
-  //     console.log(`Unique: ${uniqueValueCount}`);
-  //     console.log(`Broken: ${numberCount}`); // 2
-  //   }
-  //   if(argumento1 !== "--validate" && argumento1 !== "--stats" && argumento1 !== undefined) {
-  //     console.log(`El comando ${argumento1} no es valido.`)
-  //   }
+  } else if(argumento1 == "--stats" && argumento2 == "--validate") {
+    const numberCount = countNumberOccurrences(
+            links.map((obj) => obj.status),
+            404
+          );
+          console.log(`Total: ${links.length}`);
+          console.log(`Unique: ${uniqueValueCount}`);
+          console.log(`Broken: ${numberCount}`); 
+
+  } else {
+      console.log(`Total: ${links.length}`);
+      console.log(`Unique: ${uniqueValueCount}`);
+  }
   })
   .catch((err) => {
     console.log(err);

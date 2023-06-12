@@ -19,7 +19,7 @@
     "md-links": "./cli.js"
   },
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest",
     "start": "node ./index.js"
   },
   "preferGlobal":true,

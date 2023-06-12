@@ -7,7 +7,8 @@
   "scripts": {
     "eslint": "eslint --ext .js src/ test/",
     "stylelint": "stylelint --aei src/**/*.css",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "start": "./index.js"
    
   },
   "bootcamp": {
@@ -17,7 +18,8 @@
   },
   "dependencies": {
     "jsdom": "^22.1.0",
-    "json": "^11.0.0"
+    "json": "^11.0.0",
+    "chalk": "^9.5.0"
   },
   "devDependencies": {
     "jest": "^29.5.0"

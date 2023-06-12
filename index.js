@@ -1,5 +1,8 @@
-const {resolverDirectorio, leerArchivos, validateTrue} = require('./utils.js');
-
+const {
+  resolverDirectorio,
+  leerArchivos,
+  validateTrue,
+} = require("./utils.js");
 
 module.exports = function mdLinks(path, options = {}) {
   // La función debe retornar una promesa (Promise) que resuelva a un arreglo (Array) de objetos

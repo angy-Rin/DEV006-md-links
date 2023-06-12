@@ -1,10 +1,5 @@
 const https = require("https");
-const {
-  resolverDirectorio,
-  leerArchivos,
-  getRequest,
-} = require("../utils.js");
-
+const { resolverDirectorio, leerArchivos, getRequest } = require("../utils.js");
 
 const testCases = [
   {
@@ -47,9 +42,11 @@ test(`resolverDirectorio con un archivo que no es .md`, () => {
   );
 });
 test(`resolverDirectorio con una entrada que no es tipo string`, () => {
-  const noanString = {key:"value"};
+  const noanString = { key: "value" };
 
-  return expect(resolverDirectorio(noanString)).rejects.toEqual("El path debe ser un string");
+  return expect(resolverDirectorio(noanString)).rejects.toEqual(
+    "El path debe ser un string"
+  );
 });
 
 test(`leerArchivos `, async () => {
@@ -64,31 +61,32 @@ test(`leerArchivos `, async () => {
   expect(result).toEqual(obj);
 });
 
- 
 test(`peticiónHttps con status ok `, async () => {
-  const mockGet = jest.spyOn(https, 'get').mockImplementation((url, callback) => {
-    // comportamiento del callback de https.get
-  
-    // Simular un objeto 'res' con una propiedad 'statusCode' para probar diferentes casos
-    const res = {
-      statusCode: 200,
-      on: jest.fn().mockImplementation((event, eventCallback) => {
-        if (event === 'end') {
-          // Simula el evento 'end' llamando al callback, esto cubre la linea 79
-          eventCallback();
-        }
-      }),
-    };
-  
-    // Llama al callback simulado con el objeto 'res'
-    callback(res);
-  });
+  const mockGet = jest
+    .spyOn(https, "get")
+    .mockImplementation((url, callback) => {
+      // comportamiento del callback de https.get
+
+      // Simular un objeto 'res' con una propiedad 'statusCode' para probar diferentes casos
+      const res = {
+        statusCode: 200,
+        on: jest.fn().mockImplementation((event, eventCallback) => {
+          if (event === "end") {
+            // Simula el evento 'end' llamando al callback, esto cubre la linea 79
+            eventCallback();
+          }
+        }),
+      };
+
+      // Llama al callback simulado con el objeto 'res'
+      callback(res);
+    });
 
   // Llama a la función getRequest con el enlace deseado
-  const link = { href: 'https://existelaurl.html' };
+  const link = { href: "https://existelaurl.html" };
   getRequest(link).then((result) => {
     // Verifica los resultados esperados
-    expect(result.ok).toBe('ok');
+    expect(result.ok).toBe("ok");
     expect(result.status).toBe(200);
 
     // Restaura la implementación original de https.get
@@ -97,29 +95,30 @@ test(`peticiónHttps con status ok `, async () => {
 });
 
 test(`peticiónHttps con status 404 `, async () => {
-  const mockGet = jest.spyOn(https, 'get').mockImplementation((url, callback) => {
-    const res = { statusCode: 404 };
-    callback(res);
-  });
-  const link = { href: 'https://linkroto.html' };
+  const mockGet = jest
+    .spyOn(https, "get")
+    .mockImplementation((url, callback) => {
+      const res = { statusCode: 404 };
+      callback(res);
+    });
+  const link = { href: "https://linkroto.html" };
   getRequest(link).then((result) => {
     // Verifica los resultados esperados
-    expect(result.ok).toBe('fail');
+    expect(result.ok).toBe("fail");
     expect(result.status).toBe(404);
 
     // Restaura la implementación original de https.get
     mockGet.mockRestore();
   });
 });
-test('Prueba de getRequest con error de conexión', async () => {
-
-  const mockGet = jest.spyOn(https, 'get');
+test("Prueba de getRequest con error de conexión", async () => {
+  const mockGet = jest.spyOn(https, "get");
 
   // Simula el evento 'error' llamando al callback con un objeto Error
-  const error = new Error('Error de conexión');
+  const error = new Error("Error de conexión");
   const resMock = {
     on: jest.fn().mockImplementation((event, eventCallback) => {
-      if (event === 'error') {
+      if (event === "error") {
         eventCallback(error);
       }
     }),
@@ -127,7 +126,7 @@ test('Prueba de getRequest con error de conexión', async () => {
   mockGet.mockReturnValueOnce(resMock);
 
   // Llama a la función getRequest con el enlace deseado
-  const link = { href: 'https://nohayconexion.com' };
+  const link = { href: "https://nohayconexion.com" };
   return getRequest(link).then((result) => {
     // Verifica que se haya ejecutado el callback de error
     expect(result.status).toBe(error);

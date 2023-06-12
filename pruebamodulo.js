@@ -7,14 +7,14 @@ const mdLinks = require("./index.js");
 //     console.log(err);
 //   })
 
-
-mdLinks("./examples", {validate:true}).then((links) => {
-  console.log(links);
-  console.log('FINAL RESULT',links.length);
+mdLinks("./examples", { validate: true })
+  .then((links) => {
+    console.log(links);
+    console.log("FINAL RESULT", links.length);
   })
   .catch((err) => {
     console.log(err);
-  })
+  });
 
 // mdLinks("./examples", {validate:true}).then((links) => {
 //     console.log(links);
@@ -22,5 +22,3 @@ mdLinks("./examples", {validate:true}).then((links) => {
 //     .catch((err) => {
 //       console.log(err);
 //     })
-  
-

@@ -5,7 +5,6 @@
     "node": ">=16.x"
   },
   "scripts": {
-   // "test": "jest --coverage",
     "start": "./index.js"
    
   },

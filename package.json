@@ -5,8 +5,6 @@
     "node": ">=16.x"
   },
   "scripts": {
-    "eslint": "eslint --ext .js src/ test/",
-    "stylelint": "stylelint --aei src/**/*.css",
     "test": "jest --coverage",
     "start": "./index.js"
    

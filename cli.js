@@ -5,6 +5,9 @@ const chalk = require("chalk");
 const argumento1 = process.argv[3];
 const argumento2 = process.argv[4];
 const path2 = process.argv[2];
+// cons
+// --validate y --stats
+
 let options = {
   validate: false,
 };
@@ -21,7 +24,7 @@ mdLinks(path2, options)
       );
     }
     const uniqueValueCount = countUniqueUrl(links, "href");
-    if (argumento1 !== "--stats") {
+    if (argumento1 !== "--stats" && argumento2 == undefined) {
       links.map((object) => {
         console.log(
           `${object.href} ${chalk.bgBlack.hex("#4dcdff")(
@@ -31,7 +34,7 @@ mdLinks(path2, options)
           }`
         );
       });
-    } else if (argumento1 == "--stats" && argumento2 == "--validate") {
+    } else if (argumento1 == "--stats" && argumento2 == "--validate" || argumento1 == "--validate" && argumento2 == "--stats") {
       const numberCount = countNumberOccurrences(
         links.map((obj) => obj.status), 404 );
       console.log(`Total: ${links.length}`);

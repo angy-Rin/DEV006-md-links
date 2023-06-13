@@ -12,23 +12,28 @@ function resolverDirectorio(input) {
     if (!fs.existsSync(input)) {
       reject(`${input} Directorio/archivo no encontrado`);
     }
-    const array = []; // Crear un array para almacenar los archivos
-
-    const readDirectory = (directory) => {
-      const files = fs.readdirSync(directory);
-      files.forEach((file) => {
-        let fullPath = path.join(directory, file);
-        if (fs.statSync(fullPath).isDirectory()) {
-          readDirectory(fullPath); // Llamar recursivamente a readDirectory
-        } else if (path.extname(file) === ".md") {
-          array.push(fullPath);
-        }
-      });
-    };
-
+    let array = []; 
     if (fs.statSync(input).isDirectory()) {
-      readDirectory(input); // Llamar a la función readDirectory en lugar de resolver/recursividad
-      resolve(array); // Resolver la promesa una vez que se haya terminado de leer el directorio
+      const recursivity = readDirectory(input);
+
+      function readDirectory(directory) {
+        const files = fs.readdirSync(directory);
+        const results = [];
+      
+        files.forEach((file) => {
+          const fullPath = path.join(directory, file);
+          if (fs.statSync(fullPath).isDirectory()) {
+            const subdirectoryFiles = readDirectory(fullPath);
+            results.push(...subdirectoryFiles);
+          } else if (path.extname(file) === '.md') {
+            results.push(fullPath);
+          }
+        });
+      
+        return results;
+      }
+
+      resolve(recursivity); // Resolver la promesa una vez que se haya terminado de leer el directorio
     } else if (path.extname(input) === ".md") {
       array.push(input);
       resolve(array);
@@ -64,25 +69,26 @@ const https = require("https");
 function getRequest(link) {
   return new Promise((resolve, reject) => {
     try {
-      https.get(link.href, (res) => {
-        const { statusCode } = res;
+      https
+        .get(link.href, (res) => {
+          const { statusCode } = res;
 
-        if (statusCode >= 200 && statusCode <= 399) {
-          link.ok = "ok";
-        } else {
-          link.ok = "fail";
-        }
-        link.status = statusCode;
-        resolve(link);
-        res.on("end", () => {
+          if (statusCode >= 200 && statusCode <= 399) {
+            link.ok = "ok";
+          } else {
+            link.ok = "fail";
+          }
+          link.status = statusCode;
+          resolve(link);
+          res.on("end", () => {
+            resolve(link);
+          });
+        })
+        .on("error", (err) => {
+          link.ok = "sin conexión";
+          link.status = "error";
           resolve(link);
         });
-      })
-      .on("error", (err) => {
-        link.ok = "sin conexión";
-        link.status = "error";
-        resolve(link);
-      });
     } catch (error) {
       link.ok = "URL no valida";
       link.status = error;

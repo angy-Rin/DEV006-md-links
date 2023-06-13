@@ -14,6 +14,7 @@ mdLinks("./examples", { validate: true })
   })
   .catch((err) => {
     console.log(err);
+    console.log("FINAL CATCH:",err );
   });
 
 // mdLinks("./examples", {validate:true}).then((links) => {

@@ -40,7 +40,7 @@ function resolverDirectorio(input) {
 
 function leerArchivos(file) {
   return new Promise(function (resolve, reject) {
-    const linkRegex = /\[([^\]]+)\]\((?!#)([^\)]+)\)/g;
+    const linkRegex = /\[([^\]]+)\]\(((?!#)(https[^\)]+))\)/g;
     const links = [];
     let match;
     file.map((element, index, longitud) => {
@@ -63,11 +63,11 @@ const https = require("https");
 
 function getRequest(link) {
   return new Promise((resolve, reject) => {
-    https
-      .get(link.href, (res) => {
+    try {
+      https.get(link.href, (res) => {
         const { statusCode } = res;
 
-        if ((statusCode >= 200 && statusCode <= 399) ) {
+        if (statusCode >= 200 && statusCode <= 399) {
           link.ok = "ok";
         } else {
           link.ok = "fail";
@@ -78,12 +78,16 @@ function getRequest(link) {
           resolve(link);
         });
       })
-      //error entra cuando no hay internet
       .on("error", (err) => {
-        link.ok = "sin conexion";
-        link.status = err;
+        link.ok = "sin conexión";
+        link.status = "error";
         resolve(link);
-      }); //checar si end se ejecuta primero o despues del error
+      });
+    } catch (error) {
+      link.ok = "URL no valida";
+      link.status = error;
+      resolve(link);
+    }
   });
 }
 

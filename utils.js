@@ -10,7 +10,7 @@ function resolverDirectorio(input) {
       input = path.resolve(input);
     }
     if (!fs.existsSync(input)) {
-      reject(`${input} Directorio/archivo no encontrado`);
+      reject(`${input} Directory/file not found`);
     }
     let array = []; 
     if (fs.statSync(input).isDirectory()) {
@@ -38,7 +38,7 @@ function resolverDirectorio(input) {
       array.push(input);
       resolve(array);
     } else {
-      reject(`${input} no es un MARKDOWN`);
+      reject(`${input} is not a MARKDOWN`);
     }
   });
 }
@@ -85,13 +85,13 @@ function getRequest(link) {
           });
         })
         .on("error", (err) => {
-          link.ok = "sin conexión";
+          link.ok = "fail";
           link.status = "error";
           resolve(link);
         });
     } catch (error) {
-      link.ok = "URL no valida";
-      link.status = error;
+      link.ok = "fail";
+      link.status = "error";
       resolve(link);
     }
   });

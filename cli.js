@@ -20,7 +20,7 @@ mdLinks(path2, options)
   .then((links) => {
     if (links.length === 0) {
       console.log(
-        chalk.bgBlack.hex("#4dcdff")("No se encontró ninguna URL 🔍!")
+        chalk.bgBlack.hex("#4dcdff")("No URL found 🔍!")
       );
     }
     const uniqueValueCount = countUniqueUrl(links, "href");

@@ -4,13 +4,13 @@ const path = require("path");
 function resolverDirectorio(input) {
   return new Promise(function (resolve, reject) {
     if (typeof input !== "string") {
-      reject("El path debe ser un string");
+      reject("The path must be a string");
     }
     if (!path.isAbsolute(input)) {
       input = path.resolve(input);
     }
     if (!fs.existsSync(input)) {
-      reject(`${input} Directorio/archivo no encontrado`);
+      reject(`${input} Directory/file not found`);
     }
     let array = []; 
     if (fs.statSync(input).isDirectory()) {
@@ -30,7 +30,7 @@ function resolverDirectorio(input) {
           } 
         });
         if (results.length ===0){
-          reject('No se encontraron archivos MARKDOWN')
+          reject('No markdown files found')
         } else {
           return results;
         }
@@ -42,7 +42,7 @@ function resolverDirectorio(input) {
       array.push(input);
       resolve(array);
     } else {
-      reject(`${input} no es un MARKDOWN`);
+      reject(`${input} is not a markdown`);
     }
   });
 }
@@ -89,12 +89,12 @@ function getRequest(link) {
           });
         })
         .on("error", (err) => {
-          link.ok = "sin conexión";
+          link.ok = "fail";
           link.status = "error";
           resolve(link);
         });
     } catch (error) {
-      link.ok = "URL no valida";
+      link.ok = "fail";
       link.status = error;
       resolve(link);
     }

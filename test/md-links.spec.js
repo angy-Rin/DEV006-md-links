@@ -23,7 +23,6 @@ const obj_result_true = [
 const path  = "./examples/file2.md"
 test(`mdLinks con validate:true`, async () => {
   https.get = jest.fn().mockImplementation((url, callback) => {
-    // Simula un status code 200 (OK)
     const mockResponse = {
       statusCode: 200,
       on: (event, handler) => {
@@ -33,7 +32,6 @@ test(`mdLinks con validate:true`, async () => {
       },
     };
 
-    // Ejecuta el callback con la respuesta simulada
     callback(mockResponse);
     return {
       on: jest.fn(),

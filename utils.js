@@ -37,7 +37,7 @@ function resolverDirectorio(input) {
       
       }
 
-      resolve(recursivity); // Resolver la promesa una vez que se haya terminado de leer el directorio
+      resolve(recursivity); 
     } else if (path.extname(input) === ".md") {
       array.push(input);
       resolve(array);
@@ -103,8 +103,6 @@ function getRequest(link) {
 
 function validateTrue(array_links) {
   return new Promise((resolve, reject) => {
-    // no es conveniente utilizar una constante para almacenar datos asincronos
-    //const array_request = [];
 
     const promises = array_links.map((link) => {
       return getRequest(link);

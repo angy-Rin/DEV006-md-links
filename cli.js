@@ -1,12 +1,9 @@
 #!/usr/bin/env node
-// arriba ruta donde esta instalado npm de forma global
 const mdLinks = require("./index.js");
 const chalk = require("chalk");
 const argumento1 = process.argv[3];
 const argumento2 = process.argv[4];
 const path2 = process.argv[2];
-// cons
-// --validate y --stats
 
 let options = {
   validate: false,
@@ -69,15 +66,14 @@ mdLinks(path2, options)
   .catch((err) => {
     console.log(err);
   });
-//Set es un objeto integrado (built-in) que permite almacenar colecciones de valores únicos,
-//lo que significa que no permite elementos duplicados.
+
 function countUniqueUrl(array, key) {
   const uniqueUrl = new Set();
   array.map((obj) => uniqueUrl.add(obj[key]));
   //add y size es un método
   return uniqueUrl.size;
 }
-//el 0 es para inicializar el count
+
 function countNumberOccurrences(array, status404) {
   const numberCount = array.reduce((count, obj) => {
     if (obj === status404) {

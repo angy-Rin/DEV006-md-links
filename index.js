@@ -5,7 +5,6 @@ const {
 } = require("./utils.js");
 
 module.exports = function mdLinks(path, options = {}) {
-  // La función debe retornar una promesa (Promise) que resuelva a un arreglo (Array) de objetos
   return new Promise((resolve, reject) => {
     resolverDirectorio(path)
       .then((data) => leerArchivos(data))

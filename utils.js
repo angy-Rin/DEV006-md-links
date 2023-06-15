@@ -4,7 +4,7 @@ const path = require("path");
 function resolverDirectorio(input) {
   return new Promise(function (resolve, reject) {
     if (typeof input !== "string") {
-      reject("El path debe ser un string");
+      reject("The path must be a string");
     }
     if (!path.isAbsolute(input)) {
       input = path.resolve(input);
@@ -27,10 +27,14 @@ function resolverDirectorio(input) {
             results.push(...subdirectoryFiles);
           } else if (path.extname(file) === '.md') {
             results.push(fullPath);
-          }
+          } 
         });
+        if (results.length ===0){
+          reject('No markdown files found')
+        } else {
+          return results;
+        }
       
-        return results;
       }
 
       resolve(recursivity); // Resolver la promesa una vez que se haya terminado de leer el directorio
@@ -38,7 +42,7 @@ function resolverDirectorio(input) {
       array.push(input);
       resolve(array);
     } else {
-      reject(`${input} is not a MARKDOWN`);
+      reject(`${input} no es un MARKDOWN`);
     }
   });
 }
@@ -90,8 +94,8 @@ function getRequest(link) {
           resolve(link);
         });
     } catch (error) {
-      link.ok = "fail";
-      link.status = "error";
+      link.ok = "URL no valida";
+      link.status = error;
       resolve(link);
     }
   });

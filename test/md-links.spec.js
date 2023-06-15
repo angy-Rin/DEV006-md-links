@@ -1,5 +1,6 @@
 const https = require("https");
 const mdLinks = require("../index");
+jest.mock("https");
 
 const obj_result_true = [
     {
@@ -48,6 +49,6 @@ test(`mdLinks sin agumento validate`, async () => {
 });
   
 test('mdLinks sin agumentos', () => {
-    return expect(mdLinks()).rejects.toEqual("El path debe ser un string");
+    return expect(mdLinks()).rejects.toEqual("The path must be a string");
   });
   

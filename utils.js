@@ -95,7 +95,7 @@ function getRequest(link) {
         });
     } catch (error) {
       link.ok = "fail";
-      link.status = error;
+      link.status = "error";
       resolve(link);
     }
   });

@@ -16,6 +16,7 @@ if (argumento1 === "--validate" || argumento2 === "--validate") {
   options.validate = true;
 }
 
+
 mdLinks(path2, options)
   .then((links) => {
     if (links.length === 0) {
@@ -24,7 +25,27 @@ mdLinks(path2, options)
       );
     }
     const uniqueValueCount = countUniqueUrl(links, "href");
-    if (argumento1 !== "--stats" && argumento2 == undefined) {
+    if (
+      argumento1 !== "--validate" &&
+      argumento1 !== "--stats" &&
+      argumento1 !== undefined
+    ) {
+      console.log(
+        chalk.bgBlack.hex("#4dcdff")(
+          `${argumento1} is not valid. Try --validate or --stats`
+        )
+      );
+    }  else if (
+      argumento2 !== "--validate" &&
+      argumento2 !== "--stats" &&
+      argumento2 !== undefined
+    ) {
+      console.log(
+        chalk.bgBlack.hex("#4dcdff")(
+          `${argumento2} is not valid. Try --validate or --stats`
+        )
+      );
+    } else if (argumento1 !== "--stats" && argumento2 == undefined) {
       links.map((object) => {
         console.log(
           `${object.href} ${chalk.bgBlack.hex("#4dcdff")(

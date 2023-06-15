@@ -4,7 +4,7 @@ jest.mock("https");
 
 const obj_result_true = [
     {
-      file: "C:\\Users\\cesar\\Documents\\DEV006-md-links\\file2.md",
+      file: "C:\\Users\\cesar\\Documents\\DEV006-md-links\\examples\\file2.md",
       href: "https://www.youtube.com/watch?v=Lub5qOmY4JQ",
       text: "recurso",
       ok:"ok",
@@ -14,13 +14,13 @@ const obj_result_true = [
 
   const obj_result_false = [
     {
-      file: "C:\\Users\\cesar\\Documents\\DEV006-md-links\\file2.md",
+      file: "C:\\Users\\cesar\\Documents\\DEV006-md-links\\examples\\file2.md",
       href: "https://www.youtube.com/watch?v=Lub5qOmY4JQ",
       text: "recurso",
     },
   ];
 
-const path  = "file2.md"
+const path  = "./examples/file2.md"
 test(`mdLinks con validate:true`, async () => {
   https.get = jest.fn().mockImplementation((url, callback) => {
     // Simula un status code 200 (OK)

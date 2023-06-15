@@ -14,12 +14,12 @@ const testCases = [
     ],
   },
   {
-    input: "file.md",
-    expected: ["C:\\Users\\cesar\\Documents\\DEV006-md-links\\file.md"],
+    input: "./examples/file.md",
+    expected: ["C:\\Users\\cesar\\Documents\\DEV006-md-links\\examples\\file.md"],
   },
   {
-    input: "file2.md",
-    expected: ["C:\\Users\\cesar\\Documents\\DEV006-md-links\\file2.md"],
+    input: "./examples/file2.md",
+    expected: ["C:\\Users\\cesar\\Documents\\DEV006-md-links\\examples\\file2.md"],
   },
 ];
 
@@ -54,7 +54,7 @@ test(`resolverDirectorio con una entrada que no es tipo string`, () => {
 test(`leerArchivos `, async () => {
   const obj = [
     {
-      file: "C:\\Users\\cesar\\Documents\\DEV006-md-links\\file2.md",
+      file: "C:\\Users\\cesar\\Documents\\DEV006-md-links\\examples\\file2.md",
       href: "https://www.youtube.com/watch?v=Lub5qOmY4JQ",
       text: "recurso",
     },

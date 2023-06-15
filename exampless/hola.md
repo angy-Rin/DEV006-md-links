@@ -1,1 +1,0 @@
-[Clone Wars](https://serieslegadoskywalker.blogspot.com/p/the-clone-wars-temporada-7_119.html)

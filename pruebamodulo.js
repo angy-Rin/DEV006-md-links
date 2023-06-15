@@ -7,7 +7,7 @@ const mdLinks = require("./index.js");
 //     console.log(err);
 //   })
 
-mdLinks("./examples", { validate: true })
+mdLinks("./exampless", { validate: true })
   .then((links) => {
     console.log(links);
     console.log("FINAL RESULT", links.length);

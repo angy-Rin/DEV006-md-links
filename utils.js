@@ -27,10 +27,14 @@ function resolverDirectorio(input) {
             results.push(...subdirectoryFiles);
           } else if (path.extname(file) === '.md') {
             results.push(fullPath);
-          }
+          } 
         });
+        if (results.length ===0){
+          reject('No se encontraron archivos MARKDOWN')
+        } else {
+          return results;
+        }
       
-        return results;
       }
 
       resolve(recursivity); // Resolver la promesa una vez que se haya terminado de leer el directorio

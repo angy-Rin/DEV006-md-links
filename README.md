@@ -16,6 +16,7 @@
 ***
 
 ## 1. Preámbulo
+https://www.figma.com/file/cPQudFDIPISdTzFCY3sQjd/Diagrama-de-Flujo?type=whiteboard&node-id=0-1
 
 [Markdown](https://es.wikipedia.org/wiki/Markdown) es un lenguaje de marcado
 ligero muy popular entre developers. Es usado en muchísimas plataformas que

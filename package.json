@@ -1,6 +1,6 @@
 {
   "name": "angyrin-md-links",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "engines": {
     "node": ">=16.x"
   },

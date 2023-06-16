@@ -20,9 +20,9 @@ Incluye una línea de comando (CLI) así como una librería en JavaScript.
   
   La **_libreria_** se puede instalar via 
   ```sh
-  npm install angyrin-md-links
+  npm i angyrin-md-links
   ```
-  En cambio, la **_linea de comando_** se instala mediante
+  En cambio, para instalar la  **_linea de comando_** de forma global
    ```sh
   npm i -g angyrin-md-links
   ```

@@ -44,13 +44,13 @@ Si la ruta pasada es relativa, se resolvera como relativa al directorio.
 Con `validate:false` :
 
 * `href`: URL encontrada.
-* `text`: Texto que aparecía dentro del link (`<a>`).
+* `text`:  Texto de la URL.
 * `file`: Ruta del archivo donde se encontró el link.
 
 Con `validate:true` :
 
 * `href`: URL encontrada.
-* `text`: Texto que aparecía dentro del link (`<a>`).
+* `text`: Texto de la URL.
 * `file`: Ruta del archivo donde se encontró el link.
 * `status`: Código de respuesta HTTP.
 * `ok`: Mensaje `fail` en caso de fallo u `ok` en caso de éxito.

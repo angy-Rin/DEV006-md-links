@@ -5,8 +5,6 @@
 * [1. Resumen del proyecto](#1-resumen-del-proyecto)
 * [2. Instrucciones de uso](#2-instrucciones-de-uso)
 * [3. Proceso de desarrollo](#3-proceso-de-desarrollo)
-* [5. Criterios de aceptación mínimos del proyecto](#5-criterios-de-aceptación-mínimos-del-proyecto)
-* [6. Entregables](#6-entregables)
 
 
 ***

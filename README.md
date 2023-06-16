@@ -27,9 +27,8 @@ Incluye una línea de comando (CLI) así como una librería en JavaScript.
   npm i -g angy-md-links
   ```
 
-##### 1) Libreria.
-
-mdLinks(path, options)
+### 1) Libreria
+`mdLinks(path, options)`
 
 ##### Argumentos
 
@@ -73,7 +72,7 @@ mdLinks("./some/example.md", { validate: true })
 
 ### 2) CLI (Command Line Interface - Interfaz de Línea de Comando)
 
-Puede  ejecutarse de la siguiente manera a través de la **terminal**:
+Puede ejecutarse de la siguiente manera a través de la **terminal**:
 
 `md-links <path-to-file> [options]`
 
